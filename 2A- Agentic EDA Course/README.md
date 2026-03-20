@@ -1,63 +1,51 @@
-# 🚀 The Ultimate Guide: State-of-the-Art Agentic EDA for Analog
+# Design and Implementation of Production-Grade Multi-Agent Systems for Analog and Digital Electronic Design Automation: A Technical Master Guide
 
-**TL;DR:** Welcome to your ADHD-friendly, highly visual, and hands-on journey into the bleeding edge of Electronic Design Automation (EDA). We're taking Large Language Models (LLMs), giving them tools (Agents), and teaching them how to design computer chips—with a massive focus on the dark art of **Analog Design**.
-
----
-
-## 🎯 What is this course?
-
-Most tutorials online show you how to use AI to write a Python script. But what happens when you need an AI to design an Op-Amp, run a SPICE simulation, read the waveforms, realize the gain is too low, and tweak the transistor sizing?
-
-That's **Agentic Analog EDA**.
-
-This course breaks down the theory, the state-of-the-art (SOTA) research, and gives you runnable Python code (Jupyter Notebooks) to build these systems yourself using open-source tools.
+**TL;DR:** The EDA industry is shifting from traditional AI-assisted automation (AI4EDA) to **Agentic EDA**. As SoCs scale to hundreds of billions of transistors, manual scripts fail. This course is your technical master guide to building 2026-standard Multi-Agent Systems (MAS) specialized for analog circuit design.
 
 ---
 
-## 🧠 How to use this course (ADHD Edition)
+## 🎯 The Paradigm Shift
 
-- **Skip the fluff:** Look for the **TL;DR** at the top of every page.
-- **Visuals first:** We use a lot of diagrams and interactive HTML/SVG files. Look at them before reading the text.
-- **Hands-on immediately:** Don't just read. Open the Jupyter Notebooks and run the code. Break it. Fix it.
-- **Bite-sized:** Each module is focused on one specific concept.
+The "Productivity Gap" is widening. Verification now consumes up to 70% of the design cycle.
 
----
+*Note for AI Engineers: In 2026, your role is no longer coding, but **Agent Orchestration**. Mastery involves designing the "separation of concerns" where one agent generates and a separate "Critic Agent" judges the output to ensure trust and validation.*
 
-## 🗺️ Syllabus
+### ⚖️ Annex: Foundations of AI for EDA vs. Agentic EDA
 
-### 📖 Theory & State of the Art
-1. **[Module 1: The Digital Baseline - ChatEDA, RTLCoder & Beyond](./01_Intro_and_Digital_EDA.md)**
-   - How LLMs are conquering Digital RTL.
-   - What we can learn from digital success.
-2. **[Module 2: The Analog EDA Nightmare](./02_Analog_EDA_Challenges.md)**
-   - Why Analog is 100x harder than Digital for AI.
-   - Continuous variables, parasitics, and the "black magic" of layout.
-3. **[Module 3: SOTA Multi-Agent Architecture for Analog](./03_Multi_Agent_Architecture.md)**
-   - Designing a production-grade system using **LangGraph**.
-   - The Roles: Planner, Coder, Simulator, Critic.
-   - *Includes interactive HTML visualization!*
-4. **[Module 6: Existing Architectures Deep Dive](./06_Existing_Architectures_DeepDive.md)**
-   - An extensive analysis of SOTA Agentic EDA (AutoChip, ChatEDA, ChipNeMo).
-   - How they structure memory, tools, and feedback loops.
-5. **[Module 7: The Realistic Assessment](./07_Realistic_Assessment.md)**
-   - No hype. What actually works today?
-   - What are the hard bottlenecks? What is unsolvable?
-
-### 🛠️ Hands-On Projects (Jupyter Notebooks)
-*Note: These require a working Python environment and open-source EDA tools installed (like ngspice).*
-
-6. **[Module 4: Agentic SPICE Simulation](./notebooks/04_HandsOn_Agentic_Ngspice.ipynb)**
-   - Build a LangGraph agent that writes a netlist, runs `ngspice`, and optimizes a circuit to hit a target spec.
-7. **[Module 5: Agentic Layout & DRC](./notebooks/05_HandsOn_Agentic_Layout.ipynb)**
-   - How an agent generates a layout script (e.g., Magic VLSI) and fixes Design Rule Check (DRC) errors autonomously.
+| Feature | AI-Assisted (AI4EDA) | Agentic EDA (2026 Standard) |
+| :--- | :--- | :--- |
+| **Orchestration** | Manual (Human Engineer) | Autonomous (MAS Supervisor) |
+| **Logic Flow** | Static Tcl/Python Scripts | Dynamic Graphs (DAGs/Cycles) |
+| **Memory** | None (Per-execution) | Stratified (Evolution/Evolutionary) |
+| **Verification** | Final Check | Continuous Inner-Loop Feedback |
+| **Outcome** | Assistant results | Self-correcting design closure |
 
 ---
 
-## 🛠️ Prerequisites
+## 🗺️ Master Guide Syllabus
 
-To get the most out of the hands-on sections, you should have:
-- Basic understanding of Python (we use LangGraph/LangChain).
-- Basic understanding of Analog circuit concepts (transistors, SPICE netlists).
-- An environment with `ngspice` installed.
+1. **[Core Agentic Architectures and Mechanisms](./01_Core_Agentic_Architectures.md)**
+   - Supervisor-Worker, Consensus-Based Reasoning, Handoff Patterns, and Stateful Graph Workflows.
+2. **[Deep Dive: SOTA AI EDA Solutions](./02_Deep_Dive_SOTA_EDA.md)**
+   - Exploring ChatEDA (AutoMage), RTLCoder, and EDAid (Divergent Thought Collaboration).
+3. **[Specialized Agentic EDA for Analog Design](./03_Specialized_Analog_EDA.md)**
+   - AnalogCoder/Pro, AnalogSAGE (Stratified Memory), GENIE-ASI, and Schemato.
+4. **[The Physical Frontier: Challenges & Bottlenecks](./04_The_Physical_Frontier.md)**
+   - The Feedback Loop Crisis, Layout Interdependency (WPE/STI), and the Data Wall.
+5. **[Mastery Modules for AI Engineers](./05_Mastery_Modules.md)**
+   - Model Context Protocol (MCP), LangGraph persistent checkpointing, and the 12 Pillars of Production MAS.
+6. **[Pedagogical Project: Self-Evolving Analog Block Designer](./06_Pedagogical_Project.md)**
+   - Build a complete agentic analog EDA system module-by-module (Stages A-D).
 
-Let's build the future of chip design. 🚀
+### 🛠️ Hands-On Jupyter Notebooks
+- **[Stage A & B: Identification & Netlist Generator](./notebooks/01_Stage_AB_Netlist_Gen.ipynb)**
+- **[Stage C & D: Multimodal Waveform Debugging & Layout](./notebooks/02_Stage_CD_Waveform_Layout.ipynb)**
+
+---
+
+**References:**
+- *Multi-Agent Systems with LangGraph - Coursera (2026)*
+- *[2502.10857] Divergent Thoughts toward One Goal: LLM-based Multi-Agent Collaboration System for Electronic Design Automation (2025)*
+- *RTL-Coder: Fully Open-Source and Efficient Llm-Assisted RTL Code Generation Technique (2026)*
+- *[AAAI 2025 Oral] AnalogCoder: Analog Circuit Design via Training-Free Code Generation*
+- *AnalogCoder-Pro: Unifying Analog Circuit Generation and Optimization via Multi-modal LLMs (2025)*
