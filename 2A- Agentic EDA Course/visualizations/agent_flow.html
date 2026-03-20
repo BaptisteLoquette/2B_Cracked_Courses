@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive LangGraph Agentic EDA Flow</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #1e1e2e; color: #cdd6f4; margin: 0; padding: 20px; text-align: center; }
+        h1 { color: #89b4fa; }
+        p { max-width: 600px; margin: 0 auto 20px auto; font-size: 1.1em; }
+        .container { display: flex; justify-content: center; align-items: flex-start; gap: 40px; margin-top: 40px; }
+        .graph-container { position: relative; width: 400px; height: 400px; }
+        .node { position: absolute; width: 100px; height: 100px; border-radius: 50%; background-color: #313244; display: flex; justify-content: center; align-items: center; font-weight: bold; cursor: pointer; transition: 0.3s; border: 3px solid #45475a; color: #bac2de; z-index: 2; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+        .node:hover { transform: scale(1.1); }
+        .node.active { background-color: #f9e2af; color: #1e1e2e; border-color: #fab387; box-shadow: 0 0 20px #f9e2af; }
+
+        /* Node Positions */
+        #planner { top: 0; left: 150px; }
+        #coder { top: 150px; left: 300px; }
+        #simulator { top: 300px; left: 150px; }
+        #critic { top: 150px; left: 0; }
+
+        /* State Box */
+        .state-box { width: 400px; background-color: #181825; border: 1px solid #313244; border-radius: 8px; padding: 20px; text-align: left; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+        .state-box h3 { margin-top: 0; color: #a6e3a1; }
+        pre { background-color: #11111b; padding: 10px; border-radius: 4px; overflow-x: auto; color: #f38ba8; font-family: 'Courier New', Courier, monospace; }
+
+        .controls { margin-top: 40px; }
+        button { background-color: #89b4fa; color: #1e1e2e; border: none; padding: 10px 20px; font-size: 1.2em; font-weight: bold; border-radius: 4px; cursor: pointer; transition: 0.2s; }
+        button:hover { background-color: #b4befe; }
+        button:disabled { background-color: #45475a; color: #7f849c; cursor: not-allowed; }
+
+        .line { position: absolute; background-color: #45475a; z-index: 1; transform-origin: top left; }
+        .line.active { background-color: #f9e2af; box-shadow: 0 0 10px #f9e2af; }
+    </style>
+</head>
+<body>
+
+    <h1>🧠 LangGraph: Multi-Agent Flow for Analog Design</h1>
+    <p>Click "Next Step" to see how the shared **State** updates as the agents design an Op-Amp. Notice the loop between the Coder, Simulator, and Critic.</p>
+
+    <div class="controls">
+        <button id="nextBtn" onclick="nextStep()">Start Generation Flow 🚀</button>
+    </div>
+
+    <div class="container">
+        <div class="graph-container">
+            <!-- Draw Lines -->
+            <div class="line" id="line-p-c" style="width: 150px; height: 4px; top: 50px; left: 200px; transform: rotate(45deg);"></div>
+            <div class="line" id="line-c-s" style="width: 150px; height: 4px; top: 200px; left: 300px; transform: rotate(135deg);"></div>
+            <div class="line" id="line-s-cr" style="width: 150px; height: 4px; top: 350px; left: 150px; transform: rotate(225deg);"></div>
+            <div class="line" id="line-cr-c" style="width: 200px; height: 4px; top: 200px; left: 100px; transform: rotate(0deg);"></div>
+
+            <!-- Nodes -->
+            <div class="node" id="planner">Manager (Planner)</div>
+            <div class="node" id="coder">Coder</div>
+            <div class="node" id="simulator">Simulator (ngspice)</div>
+            <div class="node" id="critic">Critic</div>
+        </div>
+
+        <div class="state-box">
+            <h3>Shared LangGraph State Dictionary</h3>
+            <pre id="stateCode">
+{
+  "target_specs": {"gain": ">40dB", "pm": ">60deg"},
+  "current_netlist": null,
+  "simulation_logs": null,
+  "status": "idle",
+  "history": []
+}
+            </pre>
+        </div>
+    </div>
+
+    <script>
+        const steps = [
+            {
+                activeNode: 'planner',
+                activeLine: 'line-p-c',
+                state: `{\n  "target_specs": {"gain": ">40dB", "pm": ">60deg"},\n  "current_netlist": null,\n  "simulation_logs": null,\n  "status": "Manager: Task defined. Passing to Coder.",\n  "history": []\n}`
+            },
+            {
+                activeNode: 'coder',
+                activeLine: 'line-c-s',
+                state: `{\n  "target_specs": {"gain": ">40dB", "pm": ">60deg"},\n  "current_netlist": "* Op-Amp v1\\nM1 D G S B nmos W=1u L=0.1u\\n...",\n  "simulation_logs": null,\n  "status": "Coder: Generated v1 SPICE netlist.",\n  "history": []\n}`
+            },
+            {
+                activeNode: 'simulator',
+                activeLine: 'line-s-cr',
+                state: `{\n  "target_specs": {"gain": ">40dB", "pm": ">60deg"},\n  "current_netlist": "* Op-Amp v1...",\n  "simulation_logs": "ERROR: gain = 20dB (FAIL), pm = 65deg (PASS)",\n  "status": "Simulator: ngspice run complete.",\n  "history": []\n}`
+            },
+            {
+                activeNode: 'critic',
+                activeLine: 'line-cr-c',
+                state: `{\n  "target_specs": {"gain": ">40dB", "pm": ">60deg"},\n  "current_netlist": "* Op-Amp v1...",\n  "simulation_logs": "ERROR: gain = 20dB...",\n  "status": "Critic: Gain too low. Tell Coder to increase W of M1 to 2u.",\n  "history": [{"version": 1, "gain": 20, "pm": 65}]\n}`
+            },
+            {
+                activeNode: 'coder',
+                activeLine: 'line-c-s',
+                state: `{\n  "target_specs": {"gain": ">40dB", "pm": ">60deg"},\n  "current_netlist": "* Op-Amp v2\\nM1 D G S B nmos W=2u L=0.1u\\n...",\n  "simulation_logs": null,\n  "status": "Coder: Applied Critic feedback. Generated v2.",\n  "history": [{"version": 1, "gain": 20, "pm": 65}]\n}`
+            },
+            {
+                activeNode: 'simulator',
+                activeLine: 'line-s-cr', // Usually would go back to Planner if success, but let's show success here
+                state: `{\n  "target_specs": {"gain": ">40dB", "pm": ">60deg"},\n  "current_netlist": "* Op-Amp v2...",\n  "simulation_logs": "SUCCESS: gain = 42dB (PASS), pm = 62deg (PASS)",\n  "status": "Simulator: ngspice run complete.",\n  "history": [{"version": 1, "gain": 20, "pm": 65}]\n}`
+            },
+            {
+                activeNode: 'planner',
+                activeLine: '',
+                state: `{\n  "target_specs": {"gain": ">40dB", "pm": ">60deg"},\n  "current_netlist": "* Op-Amp v2... (FINAL)",\n  "simulation_logs": "SUCCESS...",\n  "status": "Manager: All specs met. Design Complete.",\n  "history": [\n    {"version": 1, "gain": 20, "pm": 65},\n    {"version": 2, "gain": 42, "pm": 62}\n  ]\n}`
+            }
+        ];
+
+        let currentStep = 0;
+
+        function nextStep() {
+            if (currentStep >= steps.length) {
+                currentStep = 0; // Reset
+                document.getElementById('nextBtn').innerText = "Restart Flow 🔄";
+                resetVisuals();
+                return;
+            }
+
+            document.getElementById('nextBtn').innerText = "Next Step ⏭️";
+
+            // Reset all nodes and lines
+            resetVisuals();
+
+            // Apply new state
+            const step = steps[currentStep];
+            if (step.activeNode) {
+                document.getElementById(step.activeNode).classList.add('active');
+            }
+            if (step.activeLine) {
+                document.getElementById(step.activeLine).classList.add('active');
+            }
+
+            // Typewriter effect for state code
+            document.getElementById('stateCode').innerText = step.state;
+
+            currentStep++;
+
+            if (currentStep === steps.length) {
+                document.getElementById('nextBtn').innerText = "Finish 🎉";
+            }
+        }
+
+        function resetVisuals() {
+            document.querySelectorAll('.node').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.line').forEach(el => el.classList.remove('active'));
+        }
+    </script>
+</body>
+</html>
