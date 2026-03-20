@@ -1,8 +1,0 @@
-markdown
-### 2.3 Building a Simple 3-Node Graph
-
-We now wire the three nodes into a `StateGraph` with linear edges:
-
-```
-START -> parse -> analyze -> report -> END
-```

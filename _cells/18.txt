@@ -1,6 +1,0 @@
-code
-# ---------------------------------------------------------------------------
-# 3.4  Visualize the EDA workflow
-# ---------------------------------------------------------------------------
-
-draw_langgraph(eda_graph, "Analog EDA Workflow - Iterative Design Loop")

@@ -1,4 +1,0 @@
-markdown
-### 2.2 Node Functions
-
-A **node function** is any callable `f(state: S) -> dict` that returns the partial state update. Nodes are the computational vertices of the graph.
