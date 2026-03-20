@@ -36,4 +36,6 @@ graph TD
     F --> G[GDSII / Final Closure]
 ```
 
+👉 **Interactive Visualization:** Before moving on, [open the interactive LangGraph Visualization](./visualizations/agent_flow.html) in your browser to see how state passes between these agents in real-time.
+
 **Next:** Dive into how specific models implement these architectures in [Section 2: Deep Dive SOTA AI EDA Solutions](./02_Deep_Dive_SOTA_EDA.md).

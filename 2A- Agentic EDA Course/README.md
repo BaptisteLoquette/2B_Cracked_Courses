@@ -43,9 +43,26 @@ The "Productivity Gap" is widening. Verification now consumes up to 70% of the d
 
 ---
 
-**References:**
-- *Multi-Agent Systems with LangGraph - Coursera (2026)*
-- *[2502.10857] Divergent Thoughts toward One Goal: LLM-based Multi-Agent Collaboration System for Electronic Design Automation (2025)*
-- *RTL-Coder: Fully Open-Source and Efficient Llm-Assisted RTL Code Generation Technique (2026)*
-- *[AAAI 2025 Oral] AnalogCoder: Analog Circuit Design via Training-Free Code Generation*
-- *AnalogCoder-Pro: Unifying Analog Circuit Generation and Optimization via Multi-modal LLMs (2025)*
+## 📚 References & Source Material
+
+- Multi-Agent Systems with LangGraph - Coursera, https://www.coursera.org/learn/multi-agent-systems-with-langgraph
+- [2502.10857] Divergent Thoughts toward One Goal: LLM-based Multi-Agent Collaboration System for Electronic Design Automation - arXiv.org, https://arxiv.org/abs/2502.10857
+- Multi-agent - Docs by LangChain, https://docs.langchain.com/oss/python/langchain/multi-agent
+- Rtlcoder: Fully Open-Source and Efficient Llm-Assisted RTL Code Generation Technique | PDF - Scribd, https://www.scribd.com/document/899354028/2312-08617v4
+- ChatEDA: A Large Language Model Powered Autonomous Agent for EDA - CUHK CSE, https://www.cse.cuhk.edu.hk/~byu/papers/J115-TCAD2024-ChatEDA.pdf
+- Building multi-agent systems with LangGraph - CWAN, https://cwan.com/resources/blog/building-multi-agent-systems-with-langgraph/
+- hkust-zhiyao/RTL-Coder: A new LLM solution for RTL code generation, achieving state-of-the-art performance in non-commercial solutions and outperforming GPT-3.5. - GitHub, https://github.com/hkust-zhiyao/RTL-Coder
+- The Blueprint for Production-Grade Agentic Architecture, https://www.artiquare.com/production-grade-agentic-architecture-blueprint/
+- Top 10 Agentic AI Frameworks In 2026 For Developers - Aitude, https://www.aitude.com/top-agentic-ai-frameworks-2026/
+- Top Agentic LLM Models & Frameworks for 2026 | Adaline, https://www.adaline.ai/blog/top-agentic-llm-models-frameworks-for-2026
+- THE DEFINITIVE BLUEPRINT FOR ENTERPRISE AGENTIC AI ARCHITECTURE | by Mohammed Brückner | CodeToDeploy | Feb, 2026 | Medium, https://medium.com/codetodeploy/the-definitive-blueprint-for-enterprise-agentic-ai-architecture-a1b7b0c384b3
+- Cadence and NVIDIA Unveil Accelerated Engineering Solutions for Agentic AI Chip and System Design - HPCwire, https://www.hpcwire.com/off-the-wire/cadence-and-nvidia-unveil-accelerated-engineering-solutions-for-agentic-ai-chip-and-system-design/
+- FareedKhan-dev/production-grade-agentic-system - GitHub, https://github.com/FareedKhan-dev/production-grade-agentic-system
+- ChatEDA: A Large Language Model Powered Autonomous Agent for EDA - ResearchGate, https://www.researchgate.net/publication/379427483_ChatEDA_A_Large_Language_Model_Powered_Autonomous_Agent_for_EDA
+- ChatEDA: A Large Language Model Powered Autonomous Agent for EDA - CUHK CSE, https://www.cse.cuhk.edu.hk/~byu/papers/C177-MLCAD2023-ChatEDA.pdf
+- The Dawn of Agentic EDA: A Survey of Autonomous Digital Chip Design - arXiv, https://arxiv.org/html/2512.23189v1
+- ACE-RTL: When Agentic Context Evolution Meets RTL-Specialized LLMs - arXiv, https://arxiv.org/html/2602.10218v1
+- [AAAI 2025 Oral] AnalogCoder: Analog Circuit Design via Training-Free Code Generation - GitHub, https://github.com/laiyao1/AnalogCoder
+- AnalogCoder-Pro: Unifying Analog Circuit Generation and Optimization via Multi-modal LLMs - arXiv.org, https://arxiv.org/html/2508.02518v1
+- LayoutCopilot: An LLM-powered Multi-agent Collaborative Framework for Interactive Analog Layout Design - ResearchGate, https://www.researchgate.net/publication/381770577_LayoutCopilot_An_LLM-powered_Multi-agent_Collaborative_Framework_for_Interactive_Analog_Layout_Design
+- A brief history and future perspectives on sizing and layout synthesis of analog/RF integrated circuits - ResearchGate, https://www.researchgate.net/publication/395078134_A_brief_history_and_future_perspectives_on_sizing_and_layout_synthesis_of_analogRF_integrated_circuits
