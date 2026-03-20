@@ -1,0 +1,25 @@
+markdown
+---
+<a id="8-subgraphs"></a>
+## 8. Subgraph Composition
+
+### 8.1 Modular EDA Flows
+
+Complex SoC design flows naturally decompose into subgraphs:
+
+$$
+G_{\text{SoC}} = G_{\text{analog\_FE}} \;\circ\; G_{\text{digital\_BE}} \;\circ\; G_{\text{integration}}
+$$
+
+Each subgraph is an independent `StateGraph` that can be:
+- Developed and tested in isolation.
+- Reused across different chip projects.
+- Composed into a parent graph with clear interface boundaries.
+
+### 8.2 Interface Contract
+
+For subgraph $G_i$ with state schema $S_i$, the parent graph $G_{\text{top}}$ wraps each subgraph in an **adapter node** that maps between the top-level state $S_{\text{top}}$ and the subgraph state $S_i$:
+
+$$
+n_{\text{adapter},i}(s_{\text{top}}) = \text{extract}(s_{\text{top}}) \xrightarrow{G_i} s_i \xrightarrow{\text{inject}} s_{\text{top}}
+$$

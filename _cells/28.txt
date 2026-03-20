@@ -1,0 +1,29 @@
+code
+# ---------------------------------------------------------------------------
+# 6.4  Replay from a specific checkpoint
+# ---------------------------------------------------------------------------
+
+target_step = 3
+replay_cp = None
+for cp in reversed(all_checkpoints):
+    if cp.metadata.get("step", 0) == target_step:
+        replay_cp = cp
+        break
+
+if replay_cp:
+    replay_config = replay_cp.config
+    print(f"Replaying from step {target_step}...")
+    print(f"Checkpoint ID: {replay_config['configurable'].get('checkpoint_id', '?')[:24]}...")
+
+    state_at_step = replay_cp.checkpoint.get("channel_values", {})
+    print(f"\nState at step {target_step}:")
+    print(f"  iteration: {state_at_step.get('iteration')}")
+    print(f"  status   : {state_at_step.get('status')}")
+    print(f"  topology : {state_at_step.get('topology', 'not yet selected')}")
+
+    # Show how you could modify state and re-run from this checkpoint
+    print(f"\nTo replay with modified state, you would call:")
+    print(f"  graph.update_state(config, {{'iteration': 0}})")
+    print(f"  graph.invoke(None, config=replay_config)")
+else:
+    print(f"No checkpoint found at step {target_step}")

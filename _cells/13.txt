@@ -1,0 +1,22 @@
+code
+# ---------------------------------------------------------------------------
+# 3.1  EDA State Definition
+# ---------------------------------------------------------------------------
+
+class EDAState(TypedDict, total=False):
+    """Complete state for an analog EDA design-space exploration workflow."""
+    spec: str                       # Natural-language design specification
+    topology: str                   # Chosen circuit topology
+    netlist: str                    # SPICE netlist
+    simulation_results: dict        # Raw simulation output
+    ppa_metrics: dict               # Power / Performance / Area metrics
+    iteration: int                  # Current design iteration
+    max_iterations: int             # Upper bound on iterations
+    status: str                     # "running" | "converged" | "failed"
+    error_log: list[str]            # Accumulated error / warning messages
+    sizing_params: dict             # Transistor W/L and bias values
+    layout_info: dict               # Layout-related data
+
+print("EDAState schema:")
+for field, typ in EDAState.__annotations__.items():
+    print(f"  {field}: {typ}")

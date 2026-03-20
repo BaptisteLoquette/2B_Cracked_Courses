@@ -1,0 +1,24 @@
+code
+from langgraph.graph import StateGraph, START, END
+
+# ---------------------------------------------------------------------------
+# 2.3  Build a 3-node graph
+# ---------------------------------------------------------------------------
+
+builder = StateGraph(SimpleState)
+
+builder.add_node("parse", node_parse)
+builder.add_node("analyze", node_analyze)
+builder.add_node("report", node_report)
+
+builder.add_edge(START, "parse")
+builder.add_edge("parse", "analyze")
+builder.add_edge("analyze", "report")
+builder.add_edge("report", END)
+
+simple_graph = builder.compile()
+
+result = simple_graph.invoke({"input_text": "  Design a two-stage OTA with 60 dB gain  "})
+print("Final state:")
+for k, v in result.items():
+    print(f"  {k}: {v}")

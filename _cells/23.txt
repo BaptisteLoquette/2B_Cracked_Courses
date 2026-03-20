@@ -1,0 +1,20 @@
+markdown
+---
+<a id="5-routing"></a>
+## 5. Conditional Routing Deep Dive
+
+### 5.1 PPA-Based Routing Decisions
+
+Real EDA workflows require nuanced routing. The decision is not simply "pass/fail" but involves **multi-objective trade-offs**:
+
+$$
+\text{Route} = \begin{cases}
+\texttt{adjust\_bias} & \text{if PM} < 45° \text{ (stability crisis)} \\
+\texttt{widen\_transistors} & \text{if } A_v < A_{v,\text{target}} \text{ and PM} \geq 45° \\
+\texttt{reduce\_current} & \text{if } P > P_{\text{budget}} \text{ and } A_v \geq A_{v,\text{target}} \\
+\texttt{generate\_layout} & \text{if all targets met} \\
+\texttt{fail} & \text{if iterations exhausted}
+\end{cases}
+$$
+
+This multi-way routing is naturally expressed as a conditional edge in LangGraph.

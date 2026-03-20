@@ -1,0 +1,14 @@
+markdown
+---
+<a id="2-fundamentals"></a>
+## 2. LangGraph Fundamentals
+
+### 2.1 State Definition with `TypedDict`
+
+In LangGraph, the **state** is a Python `TypedDict` that flows through every node. Each node receives the current state and returns a partial update (dictionary) that is merged back.
+
+$$
+s_{k+1} = s_k \;\|\; n_i(s_k)
+$$
+
+where $\|$ denotes dictionary merge (right side wins on key conflicts).

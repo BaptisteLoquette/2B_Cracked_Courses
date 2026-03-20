@@ -1,0 +1,82 @@
+code
+# ---------------------------------------------------------------------------
+# 5.2  Complex Conditional Routing
+# ---------------------------------------------------------------------------
+
+class DetailedEDAState(TypedDict, total=False):
+    spec: str
+    topology: str
+    netlist: str
+    sim_results: dict
+    targets: dict
+    sizing: dict
+    iteration: int
+    max_iterations: int
+    status: str
+    route_history: list[str]
+    error_log: list[str]
+
+
+def ppa_router(state: DetailedEDAState) -> str:
+    """Multi-objective PPA router with prioritized decision logic.
+
+    Priority order:
+      1. Iteration budget exhausted -> fail
+      2. Stability crisis (PM < 45 deg) -> adjust bias
+      3. Gain deficit -> widen transistors
+      4. Power over-budget -> reduce current
+      5. All targets met -> layout
+    """
+    results = state.get("sim_results", {})
+    targets = state.get("targets", {})
+    iteration = state.get("iteration", 0)
+    max_iter = state.get("max_iterations", 10)
+
+    if iteration >= max_iter:
+        return "fail"
+
+    pm = results.get("phase_margin_deg", 90)
+    gain = results.get("gain_db", 0)
+    power = results.get("power_mw", 0)
+
+    pm_target = targets.get("phase_margin_deg", 60)
+    gain_target = targets.get("gain_db", 60)
+    power_target = targets.get("power_mw", 1.0)
+
+    if pm < 45:
+        return "adjust_bias"
+    if gain < gain_target:
+        return "widen_transistors"
+    if power > power_target:
+        return "reduce_current"
+    if pm >= pm_target:
+        return "generate_layout"
+    return "adjust_bias"
+
+
+# Demonstrate the router with different scenarios
+test_cases = [
+    {"sim_results": {"phase_margin_deg": 30, "gain_db": 55, "power_mw": 0.8},
+     "targets": {"phase_margin_deg": 60, "gain_db": 60, "power_mw": 1.0},
+     "iteration": 2, "max_iterations": 10},
+    {"sim_results": {"phase_margin_deg": 55, "gain_db": 45, "power_mw": 0.8},
+     "targets": {"phase_margin_deg": 60, "gain_db": 60, "power_mw": 1.0},
+     "iteration": 3, "max_iterations": 10},
+    {"sim_results": {"phase_margin_deg": 65, "gain_db": 62, "power_mw": 1.5},
+     "targets": {"phase_margin_deg": 60, "gain_db": 60, "power_mw": 1.0},
+     "iteration": 4, "max_iterations": 10},
+    {"sim_results": {"phase_margin_deg": 65, "gain_db": 62, "power_mw": 0.9},
+     "targets": {"phase_margin_deg": 60, "gain_db": 60, "power_mw": 1.0},
+     "iteration": 5, "max_iterations": 10},
+    {"sim_results": {"phase_margin_deg": 50, "gain_db": 62, "power_mw": 0.9},
+     "targets": {"phase_margin_deg": 60, "gain_db": 60, "power_mw": 1.0},
+     "iteration": 10, "max_iterations": 10},
+]
+
+print("PPA Router Decision Table:")
+print(f"{'Case':>6} | {'PM(deg)':>8} | {'Gain(dB)':>9} | {'Power(mW)':>10} | {'Decision'}")
+print("-" * 60)
+for i, tc in enumerate(test_cases, 1):
+    r = tc["sim_results"]
+    decision = ppa_router(tc)
+    print(f"{i:>6} | {r['phase_margin_deg']:>8.1f} | {r['gain_db']:>9.1f} | {r['power_mw']:>10.2f} | {decision}")

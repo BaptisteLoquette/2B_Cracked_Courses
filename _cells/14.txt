@@ -1,0 +1,7 @@
+markdown
+### 3.2 Node Implementations (Mock Agents)
+
+Each node below simulates an EDA tool or agent. In production, these would wrap calls to:
+- **Spectre / ngspice** for simulation
+- **ALIGN / OpenROAD** for layout
+- An **LLM agent** for topology selection and sizing heuristics

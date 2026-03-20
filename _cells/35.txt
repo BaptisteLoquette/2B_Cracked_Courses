@@ -1,0 +1,65 @@
+code
+# ---------------------------------------------------------------------------
+# 9.4  Fan-Out / Fan-In: Multi-Topology Exploration
+# ---------------------------------------------------------------------------
+
+class ExplorationState(TypedDict, total=False):
+    spec: str
+    candidates: list[str]
+    candidate_results: dict
+    best_topology: str
+    best_fom: float
+    status: str
+
+
+def identify_candidates(state: ExplorationState) -> dict:
+    return {"candidates": ["telescopic-OTA", "folded-cascode-OTA", "two-stage-OTA"]}
+
+
+def evaluate_candidates(state: ExplorationState) -> dict:
+    """Fan-out: evaluate each topology candidate."""
+    results = {}
+    topo_params = {
+        "telescopic-OTA": {"gain": 52, "ugf": 150, "power": 0.4, "area": 1200},
+        "folded-cascode-OTA": {"gain": 65, "ugf": 100, "power": 0.85, "area": 2400},
+        "two-stage-OTA": {"gain": 78, "ugf": 80, "power": 1.2, "area": 3200},
+    }
+    for topo in state.get("candidates", []):
+        params = topo_params.get(topo, {"gain": 40, "ugf": 50, "power": 1.0, "area": 2000})
+        fom = (params["gain"] * params["ugf"]) / (params["power"] * 1000)
+        results[topo] = {**params, "fom": round(fom, 3)}
+    return {"candidate_results": results}
+
+
+def select_best(state: ExplorationState) -> dict:
+    """Fan-in: select the topology with the highest FoM."""
+    results = state.get("candidate_results", {})
+    best = max(results, key=lambda t: results[t]["fom"])
+    return {
+        "best_topology": best,
+        "best_fom": results[best]["fom"],
+        "status": "topology_selected",
+    }
+
+
+explore_builder = StateGraph(ExplorationState)
+explore_builder.add_node("identify_candidates", identify_candidates)
+explore_builder.add_node("evaluate_candidates", evaluate_candidates)
+explore_builder.add_node("select_best", select_best)
+
+explore_builder.add_edge(START, "identify_candidates")
+explore_builder.add_edge("identify_candidates", "evaluate_candidates")
+explore_builder.add_edge("evaluate_candidates", "select_best")
+explore_builder.add_edge("select_best", END)
+
+explore_graph = explore_builder.compile()
+explore_result = explore_graph.invoke({"spec": "High-gain OTA for pipeline ADC"})
+
+print("Multi-Topology Fan-Out / Fan-In Results:")
+print(f"{'Topology':<25} | {'Gain':>5} | {'UGF':>5} | {'Power':>6} | {'Area':>6} | {'FoM':>7}")
+print("-" * 70)
+for topo, m in explore_result["candidate_results"].items():
+    marker = " << BEST" if topo == explore_result["best_topology"] else ""
+    print(f"{topo:<25} | {m['gain']:>5} | {m['ugf']:>5} | {m['power']:>6.2f} | {m['area']:>6} | {m['fom']:>7.3f}{marker}")
+
+print(f"\nSelected: {explore_result['best_topology']} (FoM = {explore_result['best_fom']:.3f})")

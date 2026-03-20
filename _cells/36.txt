@@ -1,0 +1,57 @@
+code
+# ---------------------------------------------------------------------------
+# 9.5  Streaming: Real-Time Simulation Monitoring
+# ---------------------------------------------------------------------------
+
+class StreamState(TypedDict, total=False):
+    netlist: str
+    sim_progress: float
+    sim_log: list[str]
+    status: str
+
+
+def stream_start_sim(state: StreamState) -> dict:
+    return {"sim_progress": 0.0, "sim_log": ["Simulation started..."], "status": "simulating"}
+
+
+def stream_sim_step(state: StreamState) -> dict:
+    progress = state.get("sim_progress", 0.0) + 25.0
+    log = list(state.get("sim_log", []))
+    log.append(f"Progress: {progress:.0f}% - transient analysis running")
+    return {"sim_progress": progress, "sim_log": log}
+
+
+def stream_finalize(state: StreamState) -> dict:
+    log = list(state.get("sim_log", []))
+    log.append("Simulation complete - results ready")
+    return {"sim_progress": 100.0, "sim_log": log, "status": "complete"}
+
+
+def stream_router(state: StreamState) -> str:
+    if state.get("sim_progress", 0) < 100:
+        return "sim_step"
+    return "finalize"
+
+
+stream_builder = StateGraph(StreamState)
+stream_builder.add_node("start_sim", stream_start_sim)
+stream_builder.add_node("sim_step", stream_sim_step)
+stream_builder.add_node("finalize", stream_finalize)
+
+stream_builder.add_edge(START, "start_sim")
+stream_builder.add_conditional_edges("start_sim", stream_router,
+                                      {"sim_step": "sim_step", "finalize": "finalize"})
+stream_builder.add_conditional_edges("sim_step", stream_router,
+                                      {"sim_step": "sim_step", "finalize": "finalize"})
+stream_builder.add_edge("finalize", END)
+
+stream_graph = stream_builder.compile()
+
+print("Streaming Simulation Monitor:")
+print("=" * 50)
+for event in stream_graph.stream({"netlist": "* OTA netlist"}):
+    for node_name, node_output in event.items():
+        progress = node_output.get("sim_progress", "?")
+        status = node_output.get("status", "?")
+        print(f"  [{node_name:>12}] progress={progress}%, status={status}")
+print("=" * 50)

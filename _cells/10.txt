@@ -1,0 +1,4 @@
+markdown
+### 2.4 Graph Visualization
+
+We can visualize the compiled graph using `networkx` and `matplotlib`.

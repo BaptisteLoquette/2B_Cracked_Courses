@@ -1,0 +1,20 @@
+markdown
+---
+<a id="3-eda-workflow"></a>
+## 3. Building an EDA Workflow Graph
+
+### 3.1 Defining the EDA State
+
+The state captures the full snapshot of a design iteration. Every field is typed, enabling static analysis and IDE auto-completion.
+
+Key PPA (Power-Performance-Area) metrics we track:
+
+$$
+\text{FoM}_{\text{OTA}} = \frac{A_{v,\text{DC}} \cdot f_{\text{UGF}}}{P_{\text{diss}}}
+$$
+
+$$
+\text{PM} = 180° + \angle H(j\omega_{\text{UGF}})
+$$
+
+where $A_{v,\text{DC}}$ is DC gain, $f_{\text{UGF}}$ is unity-gain frequency, $P_{\text{diss}}$ is power dissipation, and PM is phase margin.

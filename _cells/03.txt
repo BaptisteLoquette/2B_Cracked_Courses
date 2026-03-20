@@ -1,0 +1,53 @@
+markdown
+---
+<a id="1-introduction"></a>
+## 1. Introduction to LangGraph for EDA
+
+### 1.1 Why LangGraph Is the Framework of Choice for Agentic EDA
+
+Analog EDA workflows exhibit several properties that map poorly onto simple sequential pipelines:
+
+| Property | Implication |
+|---|---|
+| **Iterative convergence** | A sizing engine may need 50+ iterations before PPA targets are met. |
+| **Conditional branching** | Simulation failure $\Rightarrow$ re-size; DRC violation $\Rightarrow$ re-layout. |
+| **Long-running tasks** | Post-layout extraction + simulation can exceed 48 hours. |
+| **Human oversight** | Critical topology decisions require senior designer approval. |
+| **Parallelism** | Corner simulations across TT, FF, SS, SF, FS must run concurrently. |
+
+**LangGraph** (from LangChain) models each of these as first-class primitives:
+
+- `StateGraph` — a typed, directed graph whose nodes transform a shared state object.
+- **Conditional edges** — route execution based on runtime state values.
+- **Persistent checkpointing** — save and restore full agent state across restarts.
+- **Time-travel debugging** — inspect any historical snapshot of the state.
+- **Human-in-the-loop** — interrupt execution, inject human decisions, then resume.
+- **Subgraph composition** — nest graphs for modularity (analog front-end + digital back-end).
+
+### 1.2 Core Concepts
+
+$$
+G = (S, \mathcal{N}, \mathcal{E}, \mathcal{C})
+$$
+
+where:
+- $S$ is the **state schema** (a `TypedDict`),
+- $\mathcal{N} = \{n_i : S \to S\}$ are **node functions** that transform the state,
+- $\mathcal{E} \subseteq \mathcal{N} \times \mathcal{N}$ are **unconditional edges**,
+- $\mathcal{C} \subseteq \mathcal{N} \times (S \to \mathcal{N})$ are **conditional edges** with routing functions $r: S \to \mathcal{N}$.
+
+### 1.3 Comparison with Other Agent Frameworks
+
+| Feature | **LangGraph** | CrewAI | AutoGen |
+|---|---|---|---|
+| Explicit state graph | ✅ `StateGraph` | ❌ Implicit | ❌ Conversation-based |
+| Conditional routing | ✅ `add_conditional_edges` | ⚠️ Limited | ⚠️ Manual |
+| Persistent checkpointing | ✅ Built-in `Checkpointer` | ❌ | ❌ |
+| Time-travel / replay | ✅ Native | ❌ | ❌ |
+| Human-in-the-loop | ✅ `interrupt_before` / `interrupt_after` | ⚠️ Basic | ⚠️ Basic |
+| Subgraph composition | ✅ Nested `StateGraph` | ❌ | ❌ |
+| Streaming | ✅ Token + event level | ⚠️ | ⚠️ |
+| Type safety | ✅ `TypedDict` / Pydantic | ❌ | ❌ |
+| Suited for long EDA runs | ✅ Checkpoint + resume | ❌ | ❌ |
+
+**Verdict:** For production analog EDA — where correctness, reproducibility, and fault-tolerance are non-negotiable — LangGraph is the only framework that provides the required infrastructure out of the box.
